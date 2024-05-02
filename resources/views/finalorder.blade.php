@@ -295,11 +295,56 @@
                         <h5 class="card-title">{{ $product->name }}</h5>
                     </div>
                     <div class="col-md-2 mt-3">
-                    <p class="card-text"> Quantity: ${{ $product->quantity }}</p>
-                    </div>
+
+
+                  
+
+
+
+
+                    
+
+                    @php
+        // Determine the quantity unit based on the first character of the product name
+        $productName = $product->name;
+        $quantityUnit = '';
+        $firstCharacter = strtoupper(substr($productName, 0, 1));
+
+        if ($firstCharacter === 'M' || $firstCharacter === 'V' || $firstCharacter === 'F') {
+            $quantityUnit = 'g';
+        } elseif ($firstCharacter === 'D') {
+            $quantityUnit = 'ml';
+        }
+
+        // Retrieve the updated quantity for the current product
+        $productId = $product->id;
+        $updatedQuantities = session('updatedQuantities', []);
+        $updatedQuantity = isset($updatedQuantities[$productId]) ? $updatedQuantities[$productId] : null;
+    @endphp
+
+    @if ($updatedQuantity)
+        <p>{{ $updatedQuantity }} {{ $quantityUnit }}</p>
+    @endif
+
+
+                                         </div>
                     <div class="col-md-2 mt-3">
-                        <p class="card-text">Price: ${{ $product->rate * $product->quantity }}</p>
-                    </div>
+                    @php
+            // Convert quantity to kilograms
+            $quantityInKg = $product->quantity / 1000;
+            
+            // Calculate the total price based on quantity and rate per kilogram
+            $totalProductPrice = $product->rate * $quantityInKg;
+            
+            // Add each product's total price to the total price
+            $totalPrice += $totalProductPrice;
+            
+            // Format the total product price with two decimal places
+            $formattedTotalProductPrice = number_format($totalProductPrice, 1);
+            
+            // Display the total product price
+            echo "₹".$formattedTotalProductPrice;
+        @endphp                    </div>
                   
                 </div>
             </div>
@@ -315,9 +360,9 @@
     <div class="col-6 order-summary">
         <h3>Order Summary</h3>
         <div class="price-details">
-        <p class="total-amount">Total Amount: <span>${{ session('totalPrice', 0) }}</span></p>
-            <p>Discount: <span>-$10.00</span></p>
-            <p class="total-amount">Total Amount: <span>${{ max(session('totalPrice', 0) - 10, 0) }}</span></p>
+        <p class="total-amount">Total Amount: <span>{{ session('totalPrice', 0) }}₹</span></p>
+            <p>Discount: <span>-10.00₹</span></p>
+            <p class="total-amount">Total Amount: <span>{{ max(session('totalPrice', 0) - 10, 0) }}₹</span></p>
         </div>
         <div>
         <form action="{{ route('place.order') }}" method="POST">

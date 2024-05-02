@@ -5,7 +5,7 @@
         <div class="container mt-5">
             <div class="uh">
                 <h2 style="color: green">Add Vegetable</h2>
-                <form action="{{ route('vege') }}" method="post" class="ug" enctype="multipart/form-data">
+                <form action="{{ route('vegestore') }}" method="post" class="ug" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">
@@ -61,7 +61,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <!-- Visually hidden label for screen readers -->
-                            <label for="customFile" class="sr-only">Car Image</label>
+                            <label for="customFile" class="sr-only"> Image</label>
                             <input type="file" name="image" class=" w-100" id="customFile">
                         </div>
                     </div>

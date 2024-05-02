@@ -32,6 +32,9 @@ class AdminController extends Controller
     
 
 
+    
+
+
     public function contact()
     {
         $meta= MetaData::find(5);

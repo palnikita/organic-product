@@ -60,6 +60,19 @@
                         </div>
                     </li>
 
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fab fa-fw fa-wpforms"></i>blog Data</a>
+                        <div id="submenu-7" class="collapse submenu" style="background-color: rgb(35, 69, 139); color:white">
+                        <ul class="nav flex-column">
+                        <li class="nav-item">
+        <a class="nav-link" href="{{route('blogadd')}}">Blog data Add</a>
+    </li>
+    <li class="nav-item">
+                                    <a class="nav-link" href="{{route('bloglist')}}">Blog data view</a>
+                                </li>
+
+
                 </ul>
             </div>
         </nav>

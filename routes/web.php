@@ -51,7 +51,7 @@ Route::post('/admin/dairy/{id}', [AdminController::class, 'updateD'])->name('dai
 
 
 
-Route::post('/vegestore', [AdminController::class, 'storeVegetable']);
+Route::post('/vegestore', [AdminController::class, 'storeVegetable'])->name('vegestore');
 Route::get('/vege', [AdminController::class, 'addVegetableForm'])->name('vege');
 Route::get('vegelist', [AdminController::class, 'vegelist'])->name('vegelist');
 Route::delete('/admin/vegetables/{id}', [AdminController::class, 'destroy'])->name('vegetables.destroy');
@@ -144,3 +144,7 @@ Route::get('/buynow/{type}/{id}', [Controller::class, 'buynow'])->name('buynow')
 
 
 
+
+Route::get('/blogadd', [AdminController::class, 'create'])->name('blogadd');
+Route::post('/blogadd', [AdminController::class, 'store'])->name('blog.store');
+Route::get('bloglist', [AdminController::class, 'bloglist'])->name('bloglist');

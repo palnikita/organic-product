@@ -87,7 +87,6 @@
         <table class="table table-bordered mt-4">
             <thead>
                 <tr class="align-middle">
-                    <th scope="col">Product ID</th>
                     <th scope="col">Product Name</th>
                     <th scope="col">Product Image</th>
                     <th scope="col">Product Rate</th>
@@ -99,32 +98,89 @@
             <tbody style="text-align:center;">
                 @foreach ($products as $product)
                 <tr>
-                    <td class="align-middle">{{ $product->product_id }}</td>
                     <td scope="row" class="align-middle">{{ $product->name }}</td>
                     <td scope="row" class="align-middle">
                         <img src="{{ asset($product->image) }}" width="100px" height="100px" alt="Product Image">
                     </td>
-                    <td scope="row" class="align-middle">{{ $product->rate }}</td>
+                    <td scope="row" class="align-middle">
+
+@php
+        $productName = $product->name;
+        $productRate = $product->rate;
+        
+        $firstCharacter = strtoupper(substr($productName, 0, 1)); // Get the first character and convert to uppercase
+        
+        if ($firstCharacter === 'M' || $firstCharacter === 'V' || $firstCharacter === 'F') {
+            $productRate .= '/kg';
+        } elseif ($firstCharacter === 'D') {
+            $productRate .= '/L';
+        }
+    @endphp
+    {{ $productRate }}
+
+
+
+
+                    </td>
                     <td class="align-middle">
                     <form action="{{ route('cart.update', $product->id) }}" method="post" class="d-flex align-items-center">
     @csrf
     @method('PUT')
     <input type="hidden" name="update_id" value="{{ $product->id }}">
-    <input type="number" id="quantity" name="quantity" min="250" max="20" value="{{ $product->quantity }}"  class="mr-2 input-border">
+    <input type="number" name="quantity" min="500" step="500" class="mr-2 input-border quantityInput" value="{{ old('quantity', $product->quantity) }}">
     <input type="submit" value="Update" name="update_btn" class="up_btn">
+
 </form>
 
+
+
+
+
                     </td>
-                    <td class="align-middle">{{ $product->rate * $product->quantity }}</td>
+
+
+
+                    <td class="align-middle">
+                    @php
+            // Convert quantity to kilograms
+            $quantityInKg = $product->quantity / 1000;
+            
+            // Calculate the total price based on quantity and rate per kilogram
+            $totalProductPrice = $product->rate * $quantityInKg;
+            
+            // Add each product's total price to the total price
+            $totalPrice += $totalProductPrice;
+            
+            // Format the total product price with two decimal places
+            $formattedTotalProductPrice = number_format($totalProductPrice, 2);
+            
+            // Display the total product price
+            echo $formattedTotalProductPrice;
+        @endphp
+</td>
+
+
+
+
+
+
                     <td class="align-middle">
                     <a href="{{ route('cart.destroy', $product->id) }}" onclick="return confirm('Are you sure you want to remove this item from the cart?');">
     <button class="delete-btn"><i class="fas fa-trash"></i> Remove</button>
 </a>
                     </td>
                 </tr>
-                @php
-            $totalPrice += ($product->rate * $product->quantity);
-        @endphp
+            
+
+
+
+
+
+
+
+
+
+
                 @endforeach
 
 
@@ -134,13 +190,18 @@
           <a href="{{route('shopnow')}}"  style="margin-top :0px;"><button class="option-btn">continue shopping</button></a>
         </td>
         
-        <td colspan="4" style="font-size: 19px;
+        <td colspan="3" style="font-size: 19px;
     font-weight: 500;">
             Total price
         </td>
         <td colspan="1">
-        {{ $totalPrice }}
-
+        @php
+            // Format the total price with two decimal places
+            $formattedTotalPrice = number_format($totalPrice, 2);
+            
+            // Display the formatted total price
+            echo $formattedTotalPrice;
+        @endphp
         @php
     session(['totalPrice' => $totalPrice]);
 @endphp
@@ -164,6 +225,10 @@
        </div>
 
     </div>
+
+
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

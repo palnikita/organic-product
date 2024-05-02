@@ -76,7 +76,7 @@
                     <ion-icon name="star"></ion-icon>     
                      </div>
           <div class="price-wrapper">
-            <span class="price"><h4>${{ number_format($product->sprice, 2) }}</h4></span>
+            <span class="price"><h4>{{ number_format($product->sprice, 2) }}</h4></span>
           </div>
             <a href="{{ route('buynow', ['type' => 'all', 'id' => $product->id]) }}" class="product-link" aria-label="View Product">
 

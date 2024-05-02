@@ -109,7 +109,7 @@
             </li>
 
             <li>
-              <a href="./shop.html" class="navbar-link">Shop</a>
+              <a href="{{route('shopnow')}}" class="navbar-link">Shop</a>
             </li>
 
             <li>

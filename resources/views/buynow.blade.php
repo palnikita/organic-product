@@ -1,4 +1,10 @@
 
+
+
+@php
+    $totalPrice = 0;
+@endphp
+
 @include('layout.header')
 
 
@@ -83,12 +89,53 @@
             <p>{{ $product->description }}</p>
             <div class="price-container">
                 <span class="price-label">Price:</span>
-                <span class="product-price">${{ $product->sprice }}</span>
+                <span class="product-price">{{ $product->sprice }}</span>
             </div>
             <div class="price-container">
+
+
+
+
+
+
+
+
                 <span class="price-label">Quantity:</span>
-                <span class="product-price">{{ $product->quant }}</span>
-            </div>
+                <form action="{{ route('cart.update', $product->id) }}" method="post" class="d-flex align-items-center">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="update_id" value="{{ $product->id }}">
+    <input type="number" name="quantity" min="500" step="500" class="mr-2 input-border quantityInput" value="{{ old('quantity', $product->quantity) }}">
+    <input type="submit" value="Update" name="update_btn" class="up_btn">
+
+</form> 
+
+
+
+
+   @php
+            // Convert quantity to kilograms
+            $quantityInKg = $product->quantity / 1000;
+            
+            // Calculate the total price based on quantity and rate per kilogram
+            $totalProductPrice = $product->rate * $quantityInKg;
+            
+            // Add each product's total price to the total price
+            $totalPrice += $totalProductPrice;
+            
+            // Format the total product price with two decimal places
+            $formattedTotalProductPrice = number_format($totalProductPrice, 2);
+            
+            // Display the total product price
+            echo $formattedTotalProductPrice;
+        @endphp
+
+
+
+
+
+
+</div>
             <!-- You can customize the view further based on the productType -->
            
         </div>

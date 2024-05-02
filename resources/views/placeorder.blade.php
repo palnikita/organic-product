@@ -259,7 +259,7 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="contact-no">Contact No:</label>
-                                            <input type="text" class="form-control" id="contact-no" placeholder="Enter your contact number" name="contact_no">
+                                            <input type="text" class="form-control" id="contact-no" placeholder="Enter your contact number" name="contact_no" pattern="(\+91)?[0-9]{10}" required>
                                         </div>
                                     </div>
                                     <div class="modal-body">
@@ -342,6 +342,9 @@
                         <label>
                             <input type="radio" name="payment" value="cod" checked> Cash on Delivery
                         </label>
+                        <label>
+                            <input type="radio" name="payment" value="cod" checked>online delivery
+                        </label>
                     </div>
                 </div>
                 @if (empty($address))
@@ -363,9 +366,9 @@
             <div class="col-6 order-summary">
                 <h3>Order Summary</h3>
                 <div class="price-details">
-                    <p class="total-amount">Total Amount: <span>${{ session('totalPrice', 0) }}</span></p>
-                    <p>Discount: <span>-$10.00</span></p>
-                    <p class="total-amount">Total Amount: <span>${{ max(session('totalPrice', 0) - 10, 0) }}</span></p>
+                    <p class="total-amount">Total Amount: <span>{{ session('totalPrice', 0) }}₹</span></p>
+                    <p>Discount: <span>-10.00₹</span></p>
+                    <p class="total-amount">Total Amount: <span>{{ max(session('totalPrice', 0) - 10, 0) }}₹</span></p>
                 </div>
             </div>
         </div>

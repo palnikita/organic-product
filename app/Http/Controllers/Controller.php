@@ -105,8 +105,8 @@ class Controller extends BaseController
 
     // User is authenticated, continue with adding the product to the cart
     $user = Auth::user();
-
-
+            
+    
     // Validate the request data if needed
 
     // Add the product to the cart
@@ -121,6 +121,7 @@ class Controller extends BaseController
         'quantity' => $request->input('quantity', 1),
 
     ]);
+    
 
     // Update the cart count in the session
     $cartCount = Cart::where('user_id', $user->id)->count();
@@ -143,6 +144,14 @@ public function update(Request $request, $id)
     $cartItem->update([
         'quantity' => $request->quantity
     ]);
+    $updatedQuantities = session('updatedQuantities', []);
+
+    // Update the quantity for the current product
+    $updatedQuantities[$id] = $request->quantity;
+
+    // Store the updated quantities back in the session
+    session(['updatedQuantities' => $updatedQuantities]);
+
 
     return redirect()->route('showcart')->with('success', 'Item quantity updated successfully.');
 }
@@ -247,12 +256,19 @@ public function destroyW($id)
 public function order(Request $request)
 {
    
-    $validatedData = $request->all();
+    $validatedData =     $request->validate([
+        'name' => 'required',
+        'contact_no' => 'required',
+        'address' => 'required',
+        'pincode' => 'required',
+    ]);
+
     $orders = Order::with('orderproducts')->get();
 
-    $address = order::latest()->first();
 
     order::create($validatedData);
+    $address = order::latest()->first();
+
     // Redirect back to the form with a success message
     return view('placeorder', compact('address' , 'orders'));
 
